@@ -29,10 +29,11 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         SetIcon();
+        System.out.println(today);
         try {
 //            SQLiteJDBC.iud("DROP TABLE Reservations");
-            SQLiteJDBC.iud("CREATE TABLE  `Reservations` (\n"
-                    + "  `bookingid` int(11) NOT NULL,\n"
+            SQLiteJDBC.iud("CREATE TABLE  IF NOT EXISTS `Reservations` (\n"
+                    + "  `bookingid` INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                     + "  `date` date NOT NULL,\n"
                     + "  `session` text NOT NULL,\n"
                     + "  `package` text NOT NULL,\n"
@@ -51,7 +52,7 @@ public class Main extends javax.swing.JFrame {
         }
 
         refreshtable(1);
-        jRadioButton1.setSelected(true);
+        verifiedRadio.setSelected(true);
         jPanel3.setVisible(false);
         refreshtoday();
 
@@ -71,9 +72,9 @@ public class Main extends javax.swing.JFrame {
                     ResultSet rs = SQLiteJDBC.search("SELECT package,teammembers,total,pname,pmobile,pemail,cname,cmobile,cemail FROM `Reservations` WHERE date ='" + today + "' AND session ='Morning Session' AND state ='1'  ");
                     ResultSet rs2 = SQLiteJDBC.search("SELECT package,teammembers,total,pname,pmobile,pemail,cname,cmobile,cemail FROM `Reservations` WHERE date ='" + today + "' AND session ='Noon Session' AND state ='1' ");
                     ResultSet rs3 = SQLiteJDBC.search("SELECT package,teammembers,total,pname,pmobile,pemail,cname,cmobile,cemail FROM `Reservations` WHERE date ='" + today + "' AND session ='Evening Session' AND state ='1' ");
-                    DefaultTableModel dtm = (DefaultTableModel) t1.getModel();
-                    DefaultTableModel dtm2 = (DefaultTableModel) t2.getModel();
-                    DefaultTableModel dtm3 = (DefaultTableModel) t3.getModel();
+                    DefaultTableModel dtm = (DefaultTableModel) MorningSessionTable.getModel();
+                    DefaultTableModel dtm2 = (DefaultTableModel) NoonSessionTable.getModel();
+                    DefaultTableModel dtm3 = (DefaultTableModel) EveningSessionTable.getModel();
                     dtm.setRowCount(0);
                     dtm2.setRowCount(0);
                     dtm3.setRowCount(0);
@@ -205,7 +206,7 @@ public class Main extends javax.swing.JFrame {
             public void run() {
                 try {
                     ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` WHERE  DATE(date) < '" + today + "'  ORDER BY `date` DESC");
-                    DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+                    DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
                     dtm.setRowCount(0);
                     while (rs.next()) {
                         Vector v = new Vector();
@@ -237,7 +238,7 @@ public class Main extends javax.swing.JFrame {
             public void run() {
                 try {
                     ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` where state ='" + i + "' and DATE(date) >= '" + today + "'   ORDER BY `Reservations`.`date` ASC");
-                    DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+                    DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
                     dtm.setRowCount(0);
                     while (rs.next()) {
                         Vector v = new Vector();
@@ -275,30 +276,52 @@ public class Main extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        refreshTodaysBookingsBtn = new javax.swing.JButton();
         j1 = new javax.swing.JProgressBar();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        t1 = new javax.swing.JTable();
+        MorningSessionTable = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        t2 = new javax.swing.JTable();
+        NoonSessionTable = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        t3 = new javax.swing.JTable();
+        EveningSessionTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        refreshManageBookingsBtn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        j3 = new javax.swing.JProgressBar();
+        verifyPaymentBtn = new javax.swing.JButton();
+        verifyProgress = new javax.swing.JProgressBar();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        ManageBookingsTable = new javax.swing.JTable();
         j2 = new javax.swing.JProgressBar();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        verifiedRadio = new javax.swing.JRadioButton();
+        nonVerifiedRadio = new javax.swing.JRadioButton();
+        oldBookingsRadio = new javax.swing.JRadioButton();
         jPanel8 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        createReservationsBtn = new javax.swing.JButton();
+        cEmailTxt = new javax.swing.JTextField();
+        cMobileTxt = new javax.swing.JTextField();
+        cNameTxt = new javax.swing.JTextField();
+        pEmailTxt = new javax.swing.JTextField();
+        pMobileTxt = new javax.swing.JTextField();
+        pNameTxt = new javax.swing.JTextField();
+        teamMembersTxt = new javax.swing.JTextField();
+        packageTxt = new javax.swing.JTextField();
+        dateTxt = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        sessionCombo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Reservations");
@@ -307,17 +330,17 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sync.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        refreshTodaysBookingsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sync.png"))); // NOI18N
+        refreshTodaysBookingsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                refreshTodaysBookingsBtnActionPerformed(evt);
             }
         });
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Morning Session"));
 
-        t1.setModel(new javax.swing.table.DefaultTableModel(
+        MorningSessionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -333,7 +356,7 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(t1);
+        jScrollPane3.setViewportView(MorningSessionTable);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -341,20 +364,20 @@ public class Main extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 883, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 994, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Noon Session"));
 
-        t2.setModel(new javax.swing.table.DefaultTableModel(
+        NoonSessionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -370,7 +393,7 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(t2);
+        jScrollPane4.setViewportView(NoonSessionTable);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -385,14 +408,14 @@ public class Main extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Evening Session"));
 
-        t3.setModel(new javax.swing.table.DefaultTableModel(
+        EveningSessionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -408,7 +431,7 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane5.setViewportView(t3);
+        jScrollPane5.setViewportView(EveningSessionTable);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -422,7 +445,7 @@ public class Main extends javax.swing.JFrame {
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -436,7 +459,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshTodaysBookingsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(j1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -448,7 +471,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshTodaysBookingsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(j1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -463,21 +486,21 @@ public class Main extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sync.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        refreshManageBookingsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sync.png"))); // NOI18N
+        refreshManageBookingsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                refreshManageBookingsBtnActionPerformed(evt);
             }
         });
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Manage Booking"));
 
-        jButton3.setText("Verify Payment"); // NOI18N
-        jButton3.setEnabled(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        verifyPaymentBtn.setText("Verify Payment"); // NOI18N
+        verifyPaymentBtn.setEnabled(false);
+        verifyPaymentBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                verifyPaymentBtnActionPerformed(evt);
             }
         });
 
@@ -487,27 +510,25 @@ public class Main extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
+                .addComponent(verifyPaymentBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(j3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(verifyProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(j3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addGap(0, 2, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(verifyProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(verifyPaymentBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Bookings"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        ManageBookingsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -523,12 +544,12 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ManageBookingsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                ManageBookingsTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(ManageBookingsTable);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -536,49 +557,49 @@ public class Main extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 883, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 994, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jRadioButton1.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Verified");
-        jRadioButton1.setFocusPainted(false);
-        jRadioButton1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jRadioButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        verifiedRadio.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(verifiedRadio);
+        verifiedRadio.setText("Verified");
+        verifiedRadio.setFocusPainted(false);
+        verifiedRadio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        verifiedRadio.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        verifiedRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                verifiedRadioActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Non-Verified");
-        jRadioButton2.setFocusPainted(false);
-        jRadioButton2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jRadioButton2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        nonVerifiedRadio.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(nonVerifiedRadio);
+        nonVerifiedRadio.setText("Non-Verified");
+        nonVerifiedRadio.setFocusPainted(false);
+        nonVerifiedRadio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nonVerifiedRadio.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        nonVerifiedRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                nonVerifiedRadioActionPerformed(evt);
             }
         });
 
-        jRadioButton3.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton3);
-        jRadioButton3.setText("Old ");
-        jRadioButton3.setFocusPainted(false);
-        jRadioButton3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jRadioButton3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        oldBookingsRadio.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(oldBookingsRadio);
+        oldBookingsRadio.setText("Old ");
+        oldBookingsRadio.setFocusPainted(false);
+        oldBookingsRadio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        oldBookingsRadio.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        oldBookingsRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                oldBookingsRadioActionPerformed(evt);
             }
         });
 
@@ -591,15 +612,15 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(refreshManageBookingsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(j2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton1)
+                        .addComponent(verifiedRadio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton2)
+                        .addComponent(nonVerifiedRadio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton3)
+                        .addComponent(oldBookingsRadio)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -610,13 +631,13 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(j2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(refreshManageBookingsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(verifiedRadio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nonVerifiedRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(oldBookingsRadio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -625,15 +646,146 @@ public class Main extends javax.swing.JFrame {
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
 
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Create New Reservation"));
+
+        createReservationsBtn.setText("Create Reservation");
+        createReservationsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createReservationsBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Date");
+
+        jLabel2.setText("Session");
+
+        jLabel3.setText("Package");
+
+        jLabel4.setText("Team Members");
+
+        jLabel5.setText("Personal Name");
+
+        jLabel6.setText("Personal Mobile");
+
+        jLabel7.setText("Personal Email");
+
+        jLabel8.setText("Company Name");
+
+        jLabel9.setText("Company Mobile");
+
+        jLabel10.setText("Company Email");
+
+        sessionCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Morning Session", "Noon Session", "Evening Session" }));
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addComponent(jLabel10)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cEmailTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                            .addComponent(cMobileTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addComponent(jLabel8)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5))
+                            .addGap(68, 68, 68)
+                            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(teamMembersTxt)
+                                .addComponent(packageTxt)
+                                .addComponent(dateTxt)
+                                .addComponent(pNameTxt)
+                                .addComponent(sessionCombo, 0, 211, Short.MAX_VALUE)))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addComponent(jLabel6)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pMobileTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel10Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pEmailTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(createReservationsBtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dateTxt)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sessionCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(packageTxt)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(teamMembersTxt)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pNameTxt)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pMobileTxt)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pEmailTxt)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cNameTxt)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cMobileTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cEmailTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(createReservationsBtn)
+                .addContainerGap(284, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 943, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(637, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 595, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Register Bookings", jPanel8);
@@ -652,243 +804,81 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void refreshManageBookingsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshManageBookingsBtnActionPerformed
         refreshtable(1);
-        jRadioButton1.setSelected(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        verifiedRadio.setSelected(true);
+    }//GEN-LAST:event_refreshManageBookingsBtnActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void refreshTodaysBookingsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTodaysBookingsBtnActionPerformed
         refreshtoday();
         jPanel3.setVisible(false);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_refreshTodaysBookingsBtnActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void verifiedRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifiedRadioActionPerformed
         refreshtable(1);
         jPanel3.setVisible(false);
 
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_verifiedRadioActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void nonVerifiedRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonVerifiedRadioActionPerformed
         refreshtable(0);
         jPanel3.setVisible(true);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_nonVerifiedRadioActionPerformed
 
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+    private void oldBookingsRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oldBookingsRadioActionPerformed
         refreshtableold();
         jPanel3.setVisible(false);
 
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
+    }//GEN-LAST:event_oldBookingsRadioActionPerformed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
-        String pendingbookingid = dtm.getValueAt(jTable1.getSelectedRow(), 0).toString();
+    private void ManageBookingsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ManageBookingsTableMouseClicked
+        DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
+        String pendingbookingid = dtm.getValueAt(ManageBookingsTable.getSelectedRow(), 0).toString();
         try {
-            ResultSet rs = SQLiteJDBC.search("SELECT apid FROM `Reservations` where apid ='" + pendingbookingid + "' and DATE(date) >= '" + today + "'  and state=0  ");
+            ResultSet rs = SQLiteJDBC.search("SELECT bookingid FROM `Reservations` where bookingid ='" + pendingbookingid + "' and DATE(date) >= '" + today + "'  and state=0  ");
             if (rs.next()) {
-                jButton3.setEnabled(true);
+                verifyPaymentBtn.setEnabled(true);
             } else {
-                jButton3.setEnabled(false);
+                verifyPaymentBtn.setEnabled(false);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_jTable1MouseClicked
+    }//GEN-LAST:event_ManageBookingsTableMouseClicked
+
+    private void verifyPaymentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifyPaymentBtnActionPerformed
+        int response = JOptionPane.showConfirmDialog(null, "Do you want to Verify Payment and Confirm Booking?", "Confirm",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.NO_OPTION) {
+        } else if (response == JOptionPane.YES_OPTION) {
+            DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
+            String pendingbookingid = dtm.getValueAt(ManageBookingsTable.getSelectedRow(), 0).toString();
+            verify(pendingbookingid);
+        } else if (response == JOptionPane.CLOSED_OPTION) {
+        }
+    }//GEN-LAST:event_verifyPaymentBtnActionPerformed
+
+    private void createReservationsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createReservationsBtnActionPerformed
+        try {
+            SQLiteJDBC.iud("INSERT INTO `Reservations` (`date`, `session`, `package`, `teammembers`, `total`, `pname`, `pmobile`, `pemail`, `cname`, `cmobile`, `cemail`, `state`) VALUES ('" + dateTxt.getText() + "', '" + sessionCombo.getSelectedItem().toString() + "', '" + packageTxt.getText() + "', '" + teamMembersTxt.getText() + "', '0.0', '" + pNameTxt.getText() + "','" + pMobileTxt.getText() + "', '" + pEmailTxt.getText() + "', '" + cNameTxt.getText() + "', '" + cMobileTxt.getText() + "', '" + cEmailTxt.getText() + "', '0')");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_createReservationsBtnActionPerformed
 
     public void verify(String id) {
         new Thread() {
             public void run() {
                 try {
-                    j3.setIndeterminate(true);
-                    jButton3.setEnabled(false);
-                    ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` where apid ='" + id + "' ");
+                    verifyProgress.setIndeterminate(true);
+                    verifyPaymentBtn.setEnabled(false);
+                    ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` where bookingid ='" + id + "' ");
                     if (rs.next()) {
-                        String host = "smtp.gmail.com";
-                        String port = "587";
-                        String mailFrom = "tailz.network@gmail.com";
-                        String password = "vidura2531";
-                        String mailTo = rs.getString(9);
-                        String subject = "Booking Confired ";
-                        String pkgselected = "";
-                        if (rs.getString(4).equals("Basic")) {
-                            pkgselected = "<div id='1pkg' class=''>\n"
-                                    + "                                <h2>1.BASIC</h2>\n"
-                                    + "                                <ul class='collection'>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL GUN - TIPPMAN 98 CUSTOM\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        100 PAINTBALLS\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL MASK\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        JACKET CAMO/DESSET\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        EXTA PAINTBALLS - 600LKR(100 BALLS)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK (FRESH ORANGE JUICE)\n"
-                                    + "                                    </li>\n"
-                                    + "                                </ul>\n"
-                                    + "                            </div>\n";
-                        } else if (rs.getString(4).equals("Extra")) {
-                            pkgselected = "                            <div id='2pkg' class=''>\n"
-                                    + "                                <h2>2.EXTRA</h2>\n"
-                                    + "                                <ul class='collection'>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL GUN - TIPPMAN 98 CUSTOM\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        200 PAINTBALLS\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL MASK\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        JACKET CAMO/DESSET\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        EXTA PAINTBALLS - 600LKR(100 BALLS)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK (FRESH ORANGE JUICE)\n"
-                                    + "                                    </li>\n"
-                                    + "                                </ul>\n"
-                                    + "                            </div>\n";
-                        } else if (rs.getString(4).equals("Energy")) {
-                            pkgselected = "                            <div id='3pkg' class=''>\n"
-                                    + "                                <h2>3.ENERGY</h2>\n"
-                                    + "                                <ul class='collection'>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL GUN - TIPPMAN 98 CUSTOM\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        100 PAINTBALLS\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        MEAL PLAN - LUNCH\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL MASK, JACKET CAMO/DESSET\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        EXTA PAINTBALLS - 600LKR(100 BALLS)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK (FRESH ORANGE JUICE)\n"
-                                    + "                                    </li>\n"
-                                    + "                                </ul>\n"
-                                    + "                            </div>\n";
-                        } else if (rs.getString(4).equals("Fresh")) {
-                            pkgselected = "                            <div id='4pkg' class=''>\n"
-                                    + "                                <h2>4.FRESH</h2>\n"
-                                    + "                                <ul class='collection'>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL GUN - TIPPMAN 98 CUSTOM, 100 PAINTBALLS\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        FACILITIES - SWIMMING POOL\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        MEAL PLAN - LUNCH (RICE &amp; CURRY BUFFET)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL MASK,JACKET CAMO/DESSET\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        EXTA PAINTBALLS - 600LKR(100 BALLS)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK (FRESH ORANGE JUICE)\n"
-                                    + "                                    </li>\n"
-                                    + "                                </ul>\n"
-                                    + "                            </div>\n";
-                        } else if (rs.getString(4).equals("High Fresh")) {
-                            pkgselected = "                            <div id='5pkg' class=''>\n"
-                                    + "                                <h2>5.HIGH FRESH</h2>\n"
-                                    + "                                <ul class='collection'>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL GUN - TIPPMAN 98 CUSTOM, 100 PAINTBALLS\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        FACILITIES - SWIMMING POOL\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        MEAL PLAN - LUNCH (RICE &amp; CURRY BUFFET)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL MASK,JACKET CAMO/DESSET\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        EXTA PAINTBALLS - 600LKR(100 BALLS)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK (FRESH ORANGE JUICE)\n"
-                                    + "                                    </li>\n"
-                                    + "                                </ul>\n"
-                                    + "                            </div>\n";
-                        } else if (rs.getString(4).equals("Pro")) {
-                            pkgselected = "                            <div id='6pkg' class=''>\n"
-                                    + "                                <h2>6.PRO</h2>\n"
-                                    + "                                <ul class='collection'>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL GUN - TIPPMAN 98 CUSTOM, 100 PAINTBALLS\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        NIGHT CAMPING/ CAMP FIRE\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK/ LUNCH (RICE &amp; CURRY BUFFET) / NIGHT BBQ / BREAKFAST\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        PAINTBALL MASK,JACKET CAMO/DESSET\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        EXTA PAINTBALLS - 600LKR(100 BALLS)\n"
-                                    + "                                    </li>\n"
-                                    + "                                    <li class='transparent collection-item'>\n"
-                                    + "                                        WELCOME DRINK (FRESH ORANGE JUICE)\n"
-                                    + "                                    </li>\n"
-                                    + "                                </ul>\n"
-                                    + "                            </div>\n";
-                        }
-                        String message = ""
-                                + "<!DOCTYPE html>\n"
-                                + "<html lang=\"en\">"
-                                + "<body>"
-                                + "<h1 style='color:green; background-color:#f5fff9'>Your Booking Confirmed | Paintball.lk</h1>"
-                                + "<div class='row'>\n"
-                                + "                    <div class='col s12'>\n"
-                                + "                        <div class='resume-wrap ftco-animate fadeInUp ftco-animated'>\n"
-                                + "                            <h1 style='background-color:#f5fff9'><u>Date &amp; Session</u></h1>\n"
-                                + "                            <h2 id='datedisplay'>" + rs.getString(2) + "</h2>\n"
-                                + "                            <h2 id='sessionselected'>" + rs.getString(3) + "</h2>\n"
-                                + "                            <h2 id='memcount'>" + rs.getString(5) + " Team Members</h2>\n"
-                                + "                        </div>\n"
-                                + "                    </div>\n"
-                                + "                    <div class='col s12'>\n"
-                                + "                        <div class='resume-wrap ftco-animate fadeInUp ftco-animated'>\n"
-                                + "                            <h1 style='background-color:#f5fff9'><u>Your Package</u></h1><br>\n"
-                                + pkgselected
-                                + "                        </div>\n"
-                                + "                    </div>\n"
-                                + "                    <div class='col s12'>\n"
-                                + "                        <div class='resume-wrap ftco-animate fadeInUp ftco-animated'>\n"
-                                + "                            <h1 style='background-color:#f5fff9'><u>Total Price</u></h1><br>\n"
-                                + "                            <h2 id='pricegoeshere'>" + rs.getString(6) + " LKR</h2>\n"
-                                + "\n"
-                                + "                        </div>\n"
-                                + "                    </div>\n"
-                                + "                </div>"
-                                + "</body>"
-                                + "</html>";
-                        SQLiteJDBC.iud("UPDATE `Reservations` SET `state` = '1' WHERE `Reservations`.`apid` = '" + id + "';");
+                        SQLiteJDBC.iud("UPDATE `Reservations` SET `state` = '1' WHERE `Reservations`.`bookingid` = '" + id + "';");
                     }
-                    j3.setIndeterminate(false);
+                    verifyProgress.setIndeterminate(false);
                     refreshtable(1);
-                    jRadioButton1.setSelected(true);
+                    verifiedRadio.setSelected(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -896,19 +886,6 @@ public class Main extends javax.swing.JFrame {
         }.start();
 
     }
-
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int response = JOptionPane.showConfirmDialog(null, "Do you want to Verify Payment and Confirm Booking?", "Confirm",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.NO_OPTION) {
-        } else if (response == JOptionPane.YES_OPTION) {
-            DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
-            String pendingbookingid = dtm.getValueAt(jTable1.getSelectedRow(), 0).toString();
-            verify(pendingbookingid);
-        } else if (response == JOptionPane.CLOSED_OPTION) {
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -947,14 +924,30 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable EveningSessionTable;
+    private javax.swing.JTable ManageBookingsTable;
+    private javax.swing.JTable MorningSessionTable;
+    private javax.swing.JTable NoonSessionTable;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTextField cEmailTxt;
+    private javax.swing.JTextField cMobileTxt;
+    private javax.swing.JTextField cNameTxt;
+    private javax.swing.JButton createReservationsBtn;
+    private javax.swing.JTextField dateTxt;
     private javax.swing.JProgressBar j1;
     private javax.swing.JProgressBar j2;
-    private javax.swing.JProgressBar j3;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -962,17 +955,23 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable t1;
-    private javax.swing.JTable t2;
-    private javax.swing.JTable t3;
+    private javax.swing.JRadioButton nonVerifiedRadio;
+    private javax.swing.JRadioButton oldBookingsRadio;
+    private javax.swing.JTextField pEmailTxt;
+    private javax.swing.JTextField pMobileTxt;
+    private javax.swing.JTextField pNameTxt;
+    private javax.swing.JTextField packageTxt;
+    private javax.swing.JButton refreshManageBookingsBtn;
+    private javax.swing.JButton refreshTodaysBookingsBtn;
+    private javax.swing.JComboBox<String> sessionCombo;
+    private javax.swing.JTextField teamMembersTxt;
+    private javax.swing.JRadioButton verifiedRadio;
+    private javax.swing.JButton verifyPaymentBtn;
+    private javax.swing.JProgressBar verifyProgress;
     // End of variables declaration//GEN-END:variables
 }
