@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class Main extends javax.swing.JFrame {
 
     LocalDate today = LocalDate.now();
+    Booking booking;
 
     /**
      * Creates new form Main
@@ -29,239 +30,18 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         SetIcon();
+        booking = new Booking(ManageBookingsTable, MorningSessionTable, NoonSessionTable, EveningSessionTable, j1, j2, verifyProgress, verifyPaymentBtn, verifiedRadio);
         System.out.println(today);
-        try {
-//            SQLiteJDBC.iud("DROP TABLE Reservations");
-            SQLiteJDBC.iud("CREATE TABLE  IF NOT EXISTS `Reservations` (\n"
-                    + "  `bookingid` INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                    + "  `date` date NOT NULL,\n"
-                    + "  `session` text NOT NULL,\n"
-                    + "  `package` text NOT NULL,\n"
-                    + "  `teammembers` int(11) NOT NULL,\n"
-                    + "  `total` double NOT NULL,\n"
-                    + "  `pname` text NOT NULL,\n"
-                    + "  `pmobile` int(11) NOT NULL,\n"
-                    + "  `pemail` text NOT NULL,\n"
-                    + "  `cname` text NOT NULL,\n"
-                    + "  `cmobile` int(11) NOT NULL,\n"
-                    + "  `cemail` text NOT NULL,\n"
-                    + "  `state` int(11) NOT NULL\n"
-                    + ");");
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        refreshtable(1);
+        booking.refreshtable(1);
         verifiedRadio.setSelected(true);
         jPanel3.setVisible(false);
-        refreshtoday();
+        booking.refreshtoday();
 
     }
 
     private void SetIcon() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/booking.png")));
-    }
-
-    public void refreshtoday() {
-        j1.setIndeterminate(true);
-
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    ResultSet rs = SQLiteJDBC.search("SELECT package,teammembers,total,pname,pmobile,pemail,cname,cmobile,cemail FROM `Reservations` WHERE date ='" + today + "' AND session ='Morning Session' AND state ='1'  ");
-                    ResultSet rs2 = SQLiteJDBC.search("SELECT package,teammembers,total,pname,pmobile,pemail,cname,cmobile,cemail FROM `Reservations` WHERE date ='" + today + "' AND session ='Noon Session' AND state ='1' ");
-                    ResultSet rs3 = SQLiteJDBC.search("SELECT package,teammembers,total,pname,pmobile,pemail,cname,cmobile,cemail FROM `Reservations` WHERE date ='" + today + "' AND session ='Evening Session' AND state ='1' ");
-                    DefaultTableModel dtm = (DefaultTableModel) MorningSessionTable.getModel();
-                    DefaultTableModel dtm2 = (DefaultTableModel) NoonSessionTable.getModel();
-                    DefaultTableModel dtm3 = (DefaultTableModel) EveningSessionTable.getModel();
-                    dtm.setRowCount(0);
-                    dtm2.setRowCount(0);
-                    dtm3.setRowCount(0);
-                    if (rs.next()) {
-                        Vector v1 = new Vector();
-                        Vector v2 = new Vector();
-                        Vector v3 = new Vector();
-                        Vector v4 = new Vector();
-                        Vector v5 = new Vector();
-                        Vector v6 = new Vector();
-                        Vector v7 = new Vector();
-                        Vector v8 = new Vector();
-                        Vector v9 = new Vector();
-                        v1.add("Package");
-                        v1.add(rs.getString(1));
-                        v2.add("Team Members");
-                        v2.add(rs.getString(2));
-                        v3.add("Total");
-                        v3.add(rs.getString(3));
-                        v4.add("Personal Contact Name");
-                        v4.add(rs.getString(4));
-                        v5.add("Personal Mobile");
-                        v5.add(rs.getString(5));
-                        v6.add("Personal Email");
-                        v6.add(rs.getString(6));
-                        v7.add("Company Name");
-                        v7.add(rs.getString(7));
-                        v8.add("Company Mobile");
-                        v8.add(rs.getString(8));
-                        v9.add("Company Email");
-                        v9.add(rs.getString(9));
-                        dtm.addRow(v1);
-                        dtm.addRow(v2);
-                        dtm.addRow(v3);
-                        dtm.addRow(v4);
-                        dtm.addRow(v5);
-                        dtm.addRow(v6);
-                        dtm.addRow(v7);
-                        dtm.addRow(v8);
-                        dtm.addRow(v9);
-                    }
-                    if (rs2.next()) {
-                        Vector v1 = new Vector();
-                        Vector v2 = new Vector();
-                        Vector v3 = new Vector();
-                        Vector v4 = new Vector();
-                        Vector v5 = new Vector();
-                        Vector v6 = new Vector();
-                        Vector v7 = new Vector();
-                        Vector v8 = new Vector();
-                        Vector v9 = new Vector();
-                        v1.add("Package");
-                        v1.add(rs2.getString(1));
-                        v2.add("Team Members");
-                        v2.add(rs2.getString(2));
-                        v3.add("Total");
-                        v3.add(rs2.getString(3));
-                        v4.add("Personal Contact Name");
-                        v4.add(rs2.getString(4));
-                        v5.add("Personal Mobile");
-                        v5.add(rs2.getString(5));
-                        v6.add("Personal Email");
-                        v6.add(rs2.getString(6));
-                        v7.add("Company Name");
-                        v7.add(rs2.getString(7));
-                        v8.add("Company Mobile");
-                        v8.add(rs2.getString(8));
-                        v9.add("Company Email");
-                        v9.add(rs2.getString(9));
-                        dtm2.addRow(v1);
-                        dtm2.addRow(v2);
-                        dtm2.addRow(v3);
-                        dtm2.addRow(v4);
-                        dtm2.addRow(v5);
-                        dtm2.addRow(v6);
-                        dtm2.addRow(v7);
-                        dtm2.addRow(v8);
-                        dtm2.addRow(v9);
-                    }
-                    if (rs3.next()) {
-                        Vector v1 = new Vector();
-                        Vector v2 = new Vector();
-                        Vector v3 = new Vector();
-                        Vector v4 = new Vector();
-                        Vector v5 = new Vector();
-                        Vector v6 = new Vector();
-                        Vector v7 = new Vector();
-                        Vector v8 = new Vector();
-                        Vector v9 = new Vector();
-                        v1.add("Package");
-                        v1.add(rs3.getString(1));
-                        v2.add("Team Members");
-                        v2.add(rs3.getString(2));
-                        v3.add("Total");
-                        v3.add(rs3.getString(3));
-                        v4.add("Personal Contact Name");
-                        v4.add(rs3.getString(4));
-                        v5.add("Personal Mobile");
-                        v5.add(rs3.getString(5));
-                        v6.add("Personal Email");
-                        v6.add(rs3.getString(6));
-                        v7.add("Company Name");
-                        v7.add(rs3.getString(7));
-                        v8.add("Company Mobile");
-                        v8.add(rs3.getString(8));
-                        v9.add("Company Email");
-                        v9.add(rs3.getString(9));
-                        dtm3.addRow(v1);
-                        dtm3.addRow(v2);
-                        dtm3.addRow(v3);
-                        dtm3.addRow(v4);
-                        dtm3.addRow(v5);
-                        dtm3.addRow(v6);
-                        dtm3.addRow(v7);
-                        dtm3.addRow(v8);
-                        dtm3.addRow(v9);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                j1.setIndeterminate(false);
-            }
-        }.start();
-    }
-
-    private void refreshtableold() {
-        j2.setIndeterminate(true);
-        new Thread() {
-            public void run() {
-                try {
-                    ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` WHERE  DATE(date) < '" + today + "'  ORDER BY `date` DESC");
-                    DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
-                    dtm.setRowCount(0);
-                    while (rs.next()) {
-                        Vector v = new Vector();
-                        v.add(rs.getString(1));
-                        v.add(rs.getString(2));
-                        v.add(rs.getString(3));
-                        v.add(rs.getString(4));
-                        v.add(rs.getString(5));
-                        v.add(rs.getString(6));
-                        v.add(rs.getString(7));
-                        v.add(rs.getString(8));
-                        v.add(rs.getString(9));
-                        v.add(rs.getString(10));
-                        v.add(rs.getString(11));
-                        v.add(rs.getString(12));
-                        dtm.addRow(v);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                j2.setIndeterminate(false);
-            }
-        }.start();
-    }
-
-    private void refreshtable(int i) {
-        j2.setIndeterminate(true);
-        new Thread() {
-            public void run() {
-                try {
-                    ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` where state ='" + i + "' and DATE(date) >= '" + today + "'   ORDER BY `Reservations`.`date` ASC");
-                    DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
-                    dtm.setRowCount(0);
-                    while (rs.next()) {
-                        Vector v = new Vector();
-                        v.add(rs.getString(1));
-                        v.add(rs.getString(2));
-                        v.add(rs.getString(3));
-                        v.add(rs.getString(4));
-                        v.add(rs.getString(5));
-                        v.add(rs.getString(6));
-                        v.add(rs.getString(7));
-                        v.add(rs.getString(8));
-                        v.add(rs.getString(9));
-                        v.add(rs.getString(10));
-                        v.add(rs.getString(11));
-                        v.add(rs.getString(12));
-                        dtm.addRow(v);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                j2.setIndeterminate(false);
-            }
-        }.start();
     }
 
     /**
@@ -805,28 +585,28 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshManageBookingsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshManageBookingsBtnActionPerformed
-        refreshtable(1);
+        booking.refreshtable(1);
         verifiedRadio.setSelected(true);
     }//GEN-LAST:event_refreshManageBookingsBtnActionPerformed
 
     private void refreshTodaysBookingsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTodaysBookingsBtnActionPerformed
-        refreshtoday();
+        booking.refreshtoday();
         jPanel3.setVisible(false);
     }//GEN-LAST:event_refreshTodaysBookingsBtnActionPerformed
 
     private void verifiedRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verifiedRadioActionPerformed
-        refreshtable(1);
+        booking.refreshtable(1);
         jPanel3.setVisible(false);
 
     }//GEN-LAST:event_verifiedRadioActionPerformed
 
     private void nonVerifiedRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonVerifiedRadioActionPerformed
-        refreshtable(0);
+        booking.refreshtable(0);
         jPanel3.setVisible(true);
     }//GEN-LAST:event_nonVerifiedRadioActionPerformed
 
     private void oldBookingsRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oldBookingsRadioActionPerformed
-        refreshtableold();
+        booking.refreshtableold();
         jPanel3.setVisible(false);
 
     }//GEN-LAST:event_oldBookingsRadioActionPerformed
@@ -853,7 +633,7 @@ public class Main extends javax.swing.JFrame {
         } else if (response == JOptionPane.YES_OPTION) {
             DefaultTableModel dtm = (DefaultTableModel) ManageBookingsTable.getModel();
             String pendingbookingid = dtm.getValueAt(ManageBookingsTable.getSelectedRow(), 0).toString();
-            verify(pendingbookingid);
+            booking.verify(pendingbookingid);
         } else if (response == JOptionPane.CLOSED_OPTION) {
         }
     }//GEN-LAST:event_verifyPaymentBtnActionPerformed
@@ -865,27 +645,6 @@ public class Main extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_createReservationsBtnActionPerformed
-
-    public void verify(String id) {
-        new Thread() {
-            public void run() {
-                try {
-                    verifyProgress.setIndeterminate(true);
-                    verifyPaymentBtn.setEnabled(false);
-                    ResultSet rs = SQLiteJDBC.search("SELECT * FROM `Reservations` where bookingid ='" + id + "' ");
-                    if (rs.next()) {
-                        SQLiteJDBC.iud("UPDATE `Reservations` SET `state` = '1' WHERE `Reservations`.`bookingid` = '" + id + "';");
-                    }
-                    verifyProgress.setIndeterminate(false);
-                    refreshtable(1);
-                    verifiedRadio.setSelected(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-
-    }
 
     /**
      * @param args the command line arguments
